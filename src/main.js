@@ -1,3 +1,5 @@
+let heroesInterval
+
 const heroes = [
     {name: 'Unknown', type: 0},
     {name: 'Ana', type: 3},
@@ -35,10 +37,8 @@ const heroes = [
 
 ]
 
-document.addEventListener('DOMContentLoaded', () => {
-
-    document.getElementById('launch-btn').addEventListener('click', () => {
-        let heroId = Math.trunc(Math.random()*32) + 1;
+const selectHero = () => {
+    let heroId = Math.trunc(Math.random()*32) + 1;
         let hero = heroes[heroId]
         const selectedTypeLink = document.querySelector('.type-link.bg-yellow-500')
         const typeId = parseInt(selectedTypeLink.dataset.typeid, 10)
@@ -54,6 +54,25 @@ document.addEventListener('DOMContentLoaded', () => {
         heroPortrait.src = `portraits/${heroId < 10 ? '0' : ''}${heroId}.png`
         const heroName = document.getElementById('hero-name')
         heroName.innerHTML = hero.name
+    
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    
+    const launchBtn = document.getElementById('launch-btn')
+
+    launchBtn.addEventListener('click', () => {
+        launchBtn.classList.toggle('stopped')
+
+        if(launchBtn.classList.contains('stopped')){
+            clearInterval(heroesInterval)
+            launchBtn.textContent = 'Barajar'
+        } else {
+            heroesInterval = setInterval(selectHero, 100)
+            launchBtn.textContent = 'Parar'
+        }
+
     })
 
     const typeLinks = document.querySelectorAll('.type-link')
